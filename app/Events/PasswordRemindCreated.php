@@ -14,14 +14,15 @@ class PasswordRemindCreated
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    public $email;
+    public $token;
+
+
+    public function __construct($email,$token)
     {
-        //
+        $this->email = $email;
+        $this->token = $token;
     }
 
     /**

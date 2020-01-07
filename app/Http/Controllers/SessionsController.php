@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SessionController extends Controller
+class SessionsController extends Controller
 {
     public function __construct(){
         $this->middleware('guest',['except'=>'destroy']);
@@ -16,7 +16,7 @@ class SessionController extends Controller
         return view('sessions.create');
     }
 
-    public function store(Request $requset ){
+    public function store(Request $request ){
         $this->validate($request, [
             'email' =>'required|emial',
             'password' => 'required|min:6',

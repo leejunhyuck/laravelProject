@@ -10,12 +10,6 @@ Route::get('/home', [
     'uses' => 'HomeController@index',
 ]);
 
-Route::resource('articles', 'ArticlesController');
-
-/* Markdown Viewer */
-Route::get('docs/{file?}', 'DocsController@show');
-Route::get('docs/images/{image}', 'DocsController@image')
-    ->where('image', '[\pL-\pN\._-]+-img-[0-9]{2}.png');
 
 /* 사용자 등록 */
 Route::get('auth/register', [
@@ -61,4 +55,9 @@ Route::get('auth/reset/{token}', [
 Route::post('auth/reset', [
     'as' => 'reset.store',
     'uses' => 'PasswordsController@postReset',
+]);
+
+Route::get('social/{provider}', [
+    'as' => 'social.login',
+    'uses' => 'SocialController@execute',
 ]);

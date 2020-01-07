@@ -8,7 +8,7 @@ class UsersController extends Controller
 {
 
     public function __construct(){
-        $this->middelware('guest')
+        $this->middleware('guest')
 ;
     }
 
@@ -19,13 +19,7 @@ class UsersController extends Controller
 
 
     public function store(Request $request){
-        $this->validate($request,[
-        'name' => 'required|max:255',
-        'email' => 'required|email|max:255|unique:uesrs',
-        'password' => 'required|confirmed|min:6',
-
-        ]);
-
+    
         $confirmCode = str_random(60);
 
         $user = \App\User::create([
@@ -42,6 +36,24 @@ class UsersController extends Controller
        return $this->respondCreated('가입하신 메일 계정으로 가입 확인 메일을 발송하였습니다. 가입 확인 하시고 로그인해 주세요.');
 }
 
+
+public function updatesocialAccount(Request $request, \App\User $user){
+    
+    $this->validate($request,[
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255|unique:uesrs',
+        'password' => 'required|confirmed|min:6',
+
+        ]);
+    
+        $user->update([
+            'name' => $request->input('name'),
+            'password' => bcrypt($request->input('password'))
+
+        ]);
+
+
+}
     public function confirm($code){
         $user =\App\User::whereConfirmCode($code)->first();
 

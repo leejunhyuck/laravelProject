@@ -32,6 +32,8 @@ class UsersEventListener
         );
     }
 
+
+
     public function onUserCreated(\App\Events\UserCreated $event)
     {
         $user = $event->user;
