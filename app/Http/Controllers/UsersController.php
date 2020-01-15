@@ -43,7 +43,7 @@ public function updatesocialAccount(Request $request, \App\User $user){
         'name' => 'required|max:255',
         'email' => 'required|email|max:255|unique:uesrs',
         'password' => 'required|confirmed|min:6',
-
+        
         ]);
     
         $user->update([

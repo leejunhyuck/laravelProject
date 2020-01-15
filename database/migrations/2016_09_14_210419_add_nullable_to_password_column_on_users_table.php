@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddConfirmCodeColumsOnUsersTable extends Migration
+class AddNullableToPasswordColumnOnUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,10 @@ class AddConfirmCodeColumsOnUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('last_login')->nullable();
+            $table->string('password', 60)->nullable()->change();
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -24,6 +25,8 @@ class AddConfirmCodeColumsOnUsersTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('password', 60)->nullable(false)->change();
+        });
     }
 }
