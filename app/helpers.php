@@ -75,3 +75,116 @@ if (! function_exists('format_filesize')) {
         return round($bytes, 2) . $suffix[$step];
     }
 }
+
+if (! function_exists('link_for_sort')) {
+    /**
+     * Build HTML anchor tag for sorting
+     *
+     * @param string $column
+     * @param string $text
+     * @param array  $params
+     * @return string
+     */
+    function link_for_sort($column, $text, $params = [])
+    {
+        $direction = request()->input('order');
+        $reverse = ($direction == 'asc') ? 'desc' : 'asc';
+
+        if (request()->input('sort') == $column) {
+            // Update passed $text var, only if it is active sort
+            $text = sprintf(
+                "%s %s",
+                $direction == 'asc'
+                    ? '<i class="fa fa-sort-alpha-asc"></i>'
+                    : '<i class="fa fa-sort-alpha-desc"></i>',
+                $text
+            );
+        }
+
+        $queryString = http_build_query(array_merge(
+            request()->except(['sort', 'order']),
+            ['sort' => $column, 'order' => $reverse],
+            $params
+        ));
+
+        return sprintf(
+            '<a href="%s?%s">%s</a>',
+            urldecode(request()->url()),
+            $queryString,
+            $text
+        );
+    }
+}
+
+if (! function_exists('cache_key')) {
+    /**
+     * Generate key for caching.
+     *
+     * Note that, even though the request endpoints are the same
+     *     the response body may be different because of the query string.
+     *
+     * @param $base
+     * @return string
+     */
+    function cache_key($base)
+    {
+        $key = ($query = request()->getQueryString())
+            ? $base . '.' . urlencode($query)
+            : $base;
+
+        return md5($key);
+    }
+}
+
+if (! function_exists('taggable')) {
+    /**
+     * Determine if the current cache driver has cacheTags() method
+     *
+     * @return bool
+     */
+    function taggable()
+    {
+        return in_array(config('cache.default'), ['memcached', 'redis'], true);
+    }
+}
+
+if (! function_exists('current_url')) {
+    /**
+     * Build current url string, without return param.
+     *
+     * @return string
+     */
+    function current_url()
+    {
+        if (! request()->has('return')) {
+            return request()->fullUrl();
+        }
+
+        return sprintf(
+            '%s?%s',
+            request()->url(),
+            http_build_query(request()->except('return'))
+        );
+    }
+}
+
+if (! function_exists('array_transpose')) {
+    /**
+     * Transpose the given array.
+     *
+     * @param array $data
+     * @return array
+     */
+    function array_transpose(array $data)
+    {
+        $res = [];
+
+        foreach ($data as $row => $columns) {
+            foreach ($columns as $row2 => $column2) {
+                $res[$row2][$row] = $column2;
+            }
+        }
+
+        return $res;
+    }
+}

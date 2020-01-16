@@ -20,6 +20,7 @@ class User extends Authenticatable
         'password',
         'confirm_code',
         'activated',
+        'notification',
     ];
 
     /**
@@ -55,6 +56,15 @@ class User extends Authenticatable
 
     public function articles() {
         return $this->hasMany(Article::class);
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
     }
 
     /* Query Scopes */
