@@ -6,25 +6,53 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attachment extends Model
 {
-    protected $fillable = ['filename','bytes','mime'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'filename',
+        'bytes',
+        'mime',
+    ];
 
-    public function article(){
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'article_id',
+        'created_at',
+        'updated_at',
+    ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'url',
+    ];
+
+    /* Relationships */
+
+    public function article()
+    {
         return $this->belongsTo(Article::class);
     }
 
-    public function attachments(){
+    /* Accessors */
 
-        return $this->hasMany(Attachment::class);
-    }
-
-    public function getByteAttribute($value){
-
+    public function getBytesAttribute($value)
+    {
         return format_filesize($value);
     }
 
-    public function getUrlAttribute(){
+    public function getUrlAttribute()
+    {
         return url('files/'.$this->filename);
-
     }
 }

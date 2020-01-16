@@ -38,8 +38,4 @@ class Article extends Model
     public function attachments() {
         return $this->hasMany(Attachment::class);
     }
-
-    public function comments() {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
 }
